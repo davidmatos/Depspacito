@@ -5,6 +5,28 @@
 	<groupId>org.depspace</groupId>
 	<artifactId>depspacito</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+
+	<name>${project.artifactId}</name>
+
+
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+
+
+
+		<mainclass>depspace.server.DepSpaceReplica</mainclass>
+	</properties>
+
+
+
+
 
 	<dependencies>
 
@@ -79,8 +101,8 @@
 
 
 
-	<!-- TODO: These two dependencies need to be imported in a different way. -->
-	<!-- http://roufid.com/3-ways-to-add-local-jar-to-maven-project/ -->
+		<!-- TODO: These two dependencies need to be imported in a different way. -->
+		<!-- http://roufid.com/3-ways-to-add-local-jar-to-maven-project/ -->
 		<dependency>
 			<groupId>org.pvss</groupId>
 			<artifactId>PVSS</artifactId>
@@ -123,10 +145,84 @@
 						</execution>
 					</executions>
 					<configuration>
+
 						<!-- to prevent deprecation warning: -->
 						<killAfter>-1</killAfter>
+						<mainClass>${mainclass}</mainClass>
+						<arguments>
+							<argument>${ws.url}</argument>
+						</arguments>
+
+
+						<includePluginDependencies>true</includePluginDependencies>
+						<classpathScope>compile</classpathScope>
+						<executableDependency>
+							<groupId>org.bftsmart</groupId>
+							<artifactId>SMaRt-eds</artifactId>
+						</executableDependency>
+						<executableDependency>
+							<groupId>org.pvss</groupId>
+							<artifactId>PVSS</artifactId>
+						</executableDependency>
+
+
+
+
+
+					</configuration>
+					<dependencies>
+
+						<dependency>
+							<groupId>org.pvss</groupId>
+							<artifactId>PVSS</artifactId>
+							<version>0.0.1</version>
+							<systemPath>${basedir}/lib/PVSS.jar</systemPath>
+							<scope>system</scope>
+						</dependency>
+
+						<dependency>
+							<groupId>org.bftsmart</groupId>
+							<artifactId>SMaRt-eds</artifactId>
+							<version>2.0</version>
+
+							<systemPath>${basedir}/lib/SMaRt-eds.jar</systemPath>
+							<scope>system</scope>
+						</dependency>
+					</dependencies>
+
+
+
+				</plugin>
+
+
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>appassembler-maven-plugin</artifactId>
+					<version>1.10</version>
+					<executions>
+						<execution>
+							<phase>install</phase>
+							<goals>
+								<goal>assemble</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<programs>
+							<program>
+								<mainClass>${mainclass}</mainClass>
+								<id>${project.artifactId}</id>
+							</program>
+						</programs>
 					</configuration>
 				</plugin>
+
+
+
+
+
+
+
 
 			</plugins>
 		</pluginManagement>
