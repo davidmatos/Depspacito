@@ -1,15 +1,28 @@
-#DepSpace
+# DepSpacito
+
+This is a fork of the DepSpace project intended for stability and improvements. Please credit the original project as described below.
+
+# DepSpace
 
 DepSpace (Dependable Tuple Space) is fault and intrusion-tolerant secure tuple space implementation. The main objective of the system is to provide an extended tuple space abstraction that could be used to implement Byzantine fault tolerant applications. The system design is described in an [EuroSys'08 paper](http://www.di.fc.ul.pt/~bessani/publications/eurosys08-depspace.pdf).
 
 This package contains the DepSpace source code (src/), libraries needed (lib/), a Makefile, and configuration files (config/).
 DepSpace requires the Java Runtime Environment version 1.7 or later.
 
------------- Important notice for developers -------------
+## Important notice for developers
 
 This version of DepSpace uses a tunned version of BFT-SMaRt (lib/SMaRt-eds.jar). In the future it will be fully integrated with the most up-to-date distribution of this library.
 
-------------- How to run DepSpace -----------------------
+
+## Maven Instructions
+
+DepSpacito added maven support.
+```
+mvn clean compile exec:java@replica
+mvn clean compile exec:java@client
+```
+
+### How to run DepSpace
 
 First you need to configurate the BFT-SMaRt library. Please take a look at [BFT-SMaRt page](http://www.di.fc.ul.pt/~bessani/publications/eurosys08-depspace.pdf).
 
@@ -33,9 +46,4 @@ The <extension-code-dir> field is related with depspace extentions source direct
 ./client 4 /home/ubuntu/EDS/config /home/ubuntu/EDS/src/
 
 
-
-
---------------- Maven Instructions ------------------------
-mvn clean compile exec:java@replica
-mvn clean compile exec:java@client
 
