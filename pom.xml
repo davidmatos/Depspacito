@@ -10,10 +10,12 @@
 	<name>${project.artifactId}</name>
 
 	<properties>
+
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
+		<version.maven-install-plugin>2.5.2</version.maven-install-plugin>
 		<replicaMainclass>depspace.server.DepSpaceReplica</replicaMainclass>
 		<clientMainclass>depspace.demo.EDSDemoClient</clientMainclass>
 		<replica.id>0</replica.id>
@@ -30,12 +32,6 @@
 			<artifactId>groovy-all</artifactId>
 			<version>2.4.12</version>
 		</dependency>
-
-		<!-- <dependency> -->
-		<!-- <groupId>groovy</groupId> -->
-		<!-- <artifactId>groovy-1.0-jsr</artifactId> -->
-		<!-- <version>06</version> -->
-		<!-- </dependency> -->
 
 		<dependency>
 			<groupId>commons-codec</groupId>
@@ -62,33 +58,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-jdk14</artifactId>
-			<version>1.5.8</version>
-			<scope>test</scope>
+			<groupId>org.bftsmart</groupId>
+			<artifactId>SMaRt-eds</artifactId>
+			<version>2.0</version>
 		</dependency>
-		<!-- <dependency> -->
-		<!-- <groupId>cglib</groupId> -->
-		<!-- <artifactId>cglib-nodep</artifactId> -->
-		<!-- <version>2.1_3</version> -->
-		<!-- </dependency> -->
 
-		<!-- TODO: These two dependencies need to be imported in a different way. -->
-		<!-- http://roufid.com/3-ways-to-add-local-jar-to-maven-project/ -->
 		<dependency>
 			<groupId>org.pvss</groupId>
 			<artifactId>PVSS</artifactId>
 			<version>0.0.1</version>
-			<systemPath>${basedir}/lib/PVSS.jar</systemPath>
-			<scope>system</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.bftsmart</groupId>
-			<artifactId>SMaRt-eds</artifactId>
-			<version>2.0</version>
-			<systemPath>${basedir}/lib/SMaRt-eds.jar</systemPath>
-			<scope>system</scope>
 		</dependency>
 
 	</dependencies>
@@ -117,15 +95,6 @@
 								</arguments>
 								<includePluginDependencies>true</includePluginDependencies>
 								<classpathScope>compile</classpathScope>
-								<executableDependency>
-									<groupId>org.bftsmart</groupId>
-									<artifactId>SMaRt-eds</artifactId>
-								</executableDependency>
-								<executableDependency>
-									<groupId>org.pvss</groupId>
-									<artifactId>PVSS</artifactId>
-								</executableDependency>
-
 							</configuration>
 						</execution>
 						<execution>
@@ -144,36 +113,10 @@
 								</arguments>
 								<includePluginDependencies>true</includePluginDependencies>
 								<classpathScope>compile</classpathScope>
-								<executableDependency>
-									<groupId>org.bftsmart</groupId>
-									<artifactId>SMaRt-eds</artifactId>
-								</executableDependency>
-								<executableDependency>
-									<groupId>org.pvss</groupId>
-									<artifactId>PVSS</artifactId>
-								</executableDependency>
 							</configuration>
 						</execution>
 					</executions>
-
-					<dependencies>
-						<dependency>
-							<groupId>org.pvss</groupId>
-							<artifactId>PVSS</artifactId>
-							<version>0.0.1</version>
-							<systemPath>${basedir}/lib/PVSS.jar</systemPath>
-							<scope>system</scope>
-						</dependency>
-
-						<dependency>
-							<groupId>org.bftsmart</groupId>
-							<artifactId>SMaRt-eds</artifactId>
-							<version>2.0</version>
-
-							<systemPath>${basedir}/lib/SMaRt-eds.jar</systemPath>
-							<scope>system</scope>
-						</dependency>
-					</dependencies>
+					
 				</plugin>
 
 				<plugin>
@@ -208,6 +151,51 @@
 							</property>
 						</systemProperties>
 					</configuration>
+				</plugin>
+
+				<!-- Adding non maven dependencies following this approach: -->
+				<!-- https://dzone.com/articles/the-maven-way-to-add-non-maven-jars-to-a-maven-pro -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>${version.maven-install-plugin}</version>
+					<executions>
+
+						<execution>
+							<id>install-PVSS-jar</id>
+							<phase>clean</phase>
+							<configuration>
+								<repositoryLayout>default</repositoryLayout>
+								<groupId>org.pvss</groupId>
+								<artifactId>PVSS</artifactId>
+								<version>0.0.1</version>
+								<file>${basedir}/lib/PVSS.jar</file>
+								<packaging>jar</packaging>
+								<generatePom>true</generatePom>
+							</configuration>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+						</execution>
+
+						<execution>
+							<id>install-SMaRt-eds-jar</id>
+							<phase>clean</phase>
+							<configuration>
+								<repositoryLayout>default</repositoryLayout>
+								<groupId>org.bftsmart</groupId>
+								<artifactId>SMaRt-eds</artifactId>
+								<version>2.0</version>
+								<file>${basedir}/lib/SMaRt-eds.jar</file>
+								<packaging>jar</packaging>
+								<generatePom>true</generatePom>
+							</configuration>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+						</execution>
+
+					</executions>
 				</plugin>
 
 			</plugins>
