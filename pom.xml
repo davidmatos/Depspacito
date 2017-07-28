@@ -1,0 +1,136 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.depspace</groupId>
+	<artifactId>depspacito</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>group</groupId>
+			<artifactId>com.sample</artifactId>
+			<version>1.0</version>
+
+			<systemPath>${project.basedir}/lib/PVSS.jar</systemPath>
+		</dependency>
+
+		<dependency>
+			<groupId>group</groupId>
+			<artifactId>com.sample</artifactId>
+			<version>1.1-beta</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/SMaRt-eds.jar</systemPath>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-all</artifactId>
+			<version>2.4.12</version>
+		</dependency>
+
+		<!-- <dependency> -->
+		<!-- <groupId>groovy</groupId> -->
+		<!-- <artifactId>groovy-1.0-jsr</artifactId> -->
+		<!-- <version>06</version> -->
+		<!-- </dependency> -->
+
+
+
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.dev-smart</groupId>
+			<artifactId>devsmart-core</artifactId>
+			<version>0.1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-all</artifactId>
+			<version>4.0.25.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.5.8</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-jdk14</artifactId>
+			<version>1.5.8</version>
+			<scope>test</scope>
+		</dependency>
+
+
+		<!-- <dependency> -->
+		<!-- <groupId>cglib</groupId> -->
+		<!-- <artifactId>cglib-nodep</artifactId> -->
+		<!-- <version>2.1_3</version> -->
+		<!-- </dependency> -->
+
+
+
+
+
+	<!-- TODO: These two dependencies need to be imported in a different way. -->
+	<!-- http://roufid.com/3-ways-to-add-local-jar-to-maven-project/ -->
+		<dependency>
+			<groupId>org.pvss</groupId>
+			<artifactId>PVSS</artifactId>
+			<version>0.0.1</version>
+			<systemPath>${basedir}/lib/PVSS.jar</systemPath>
+			<scope>system</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.bftsmart</groupId>
+			<artifactId>SMaRt-eds</artifactId>
+			<version>2.0</version>
+
+			<systemPath>${basedir}/lib/SMaRt-eds.jar</systemPath>
+			<scope>system</scope>
+		</dependency>
+
+
+
+
+
+	</dependencies>
+
+
+
+
+	<build>
+		<pluginManagement>
+			<!-- plugin management defines common settings -->
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>exec-maven-plugin</artifactId>
+					<version>1.5.0</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>java</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<!-- to prevent deprecation warning: -->
+						<killAfter>-1</killAfter>
+					</configuration>
+				</plugin>
+
+			</plugins>
+		</pluginManagement>
+	</build>
+
+
+</project>
