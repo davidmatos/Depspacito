@@ -78,7 +78,7 @@ public class ReplaceTriggerLayer extends DepSpaceServerLayer {
 	}
 
 	private DepTuple replaceDirAndChildrens(DepTuple template, DepTuple tuple, Context ctx) throws DepSpaceException {
-		System.out.println("\n\n -- ReplaceDirAndChildren : template = " + template + "tuple = " + tuple);
+		DepSpaceReplica.logger.info("\n\n -- ReplaceDirAndChildren : template = " + template + "tuple = " + tuple);
 		DepTuple res = upperLayer.replace(template, tuple, ctx);
 
 		Object[] fieldsTupTempl = template.getFields();

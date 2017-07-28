@@ -32,3 +32,10 @@ The <extension-code-dir> field is related with depspace extentions source direct
 
 ./client 4 /home/ubuntu/EDS/config /home/ubuntu/EDS/src/
 
+
+
+
+--------------- Maven Instructions ------------------------
+mvn clean compile exec:java@replica
+mvn clean compile exec:java@client
+

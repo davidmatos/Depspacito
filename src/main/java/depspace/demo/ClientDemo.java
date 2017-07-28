@@ -12,6 +12,7 @@ package depspace.demo;
 import java.util.Collection;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 import depspace.client.DepSpaceAccessor;
 import depspace.client.DepSpaceAdmin;
@@ -19,6 +20,7 @@ import depspace.general.DepSpaceConfiguration;
 import depspace.general.DepSpaceException;
 import depspace.general.DepSpaceProperties;
 import depspace.general.DepTuple;
+import depspace.server.DepSpaceReplica;
 
 /**
  * 
@@ -26,6 +28,9 @@ import depspace.general.DepTuple;
  */
 public class ClientDemo {
 
+	public static final Logger logger = Logger.getLogger(ClientDemo.class.getName());
+	
+	
 //	private int executions;
 //	private boolean createSpace;
 //	private int id;

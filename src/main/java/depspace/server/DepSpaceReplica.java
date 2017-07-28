@@ -1,9 +1,11 @@
 package depspace.server;
 
+import java.io.File;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Logger;
 
 import bftsmart.statemanagement.StateManager;
 import bftsmart.tom.MessageContext;
@@ -20,66 +22,72 @@ import depspace.general.DepSpaceReply;
 import depspace.general.DepSpaceRequest;
 import depspace.general.DepTuple;
 
-
 public class DepSpaceReplica extends DefaultRecoverable implements DepSpaceEventHandler {
+
+	public static final Logger logger = Logger.getLogger(DepSpaceReplica.class.getName());
 
 	private final int replicaID;
 	private final DepSpaceManager spacesManager;
 	private final Lock stateLock;
-	
-    private StateManager stateManager;
-    private ReplicaContext replicaContext;
-    
-    private final BlockingDeque<DepSpaceReplyContent> replyQueue;
-    
-	
+
+	private StateManager stateManager;
+	private ReplicaContext replicaContext;
+
+	private final BlockingDeque<DepSpaceReplyContent> replyQueue;
+
 	public DepSpaceReplica(int id, boolean join) {
 		new ServiceReplica(id, DepSpaceConfiguration.configHome, join, this, this);
 		this.replicaID = id;
-		this.spacesManager = DepSpaceConfiguration.IS_EXTENSIBLE ? new EDSExtensionManager(id, this) : new DepSpaceManager(id, this);
+		this.spacesManager = DepSpaceConfiguration.IS_EXTENSIBLE ? new EDSExtensionManager(id, this)
+				: new DepSpaceManager(id, this);
 		this.stateLock = new ReentrantLock();
 		this.replyQueue = new LinkedBlockingDeque<DepSpaceReplyContent>();
 		(new DepSpaceReplicaSendThread()).start();
 	}
 
-	
 	/********************
 	 * BATCH EXECUTABLE *
 	 ********************/
-	
+
 	@Override
 	public byte[] executeUnordered(byte[] command, MessageContext msgCtx) {
 		execute(command, msgCtx, true);
 		return null;
 	}
-	
+
 	private void execute(byte[] command, MessageContext msgCtx, boolean priority) {
 		DepSpaceRequest request = null;
 		try {
 			// Invoke operation
 			request = new DepSpaceRequest(command, msgCtx);
-			Object result = spacesManager.invokeOperation(request.context.tsName, request.operation, request.arg, request.context);
-			
+			Object result = spacesManager.invokeOperation(request.context.tsName, request.operation, request.arg,
+					request.context);
+
 			// Handle result
-			if((result == null) && request.operation.isBlocking()) sendReply(TOMMessage.BLOCKING_HINT, request.context);
-			else handleResult(request.operation, result, request.context, priority);
-		} catch(Exception e) {
-			DepSpaceException dse = (e instanceof DepSpaceException) ? (DepSpaceException) e : new DepSpaceException("Server-side exception: " + e);
-			if(request != null) handleResult(DepSpaceOperation.EXCEPTION, dse, request.context, priority);
+			if ((result == null) && request.operation.isBlocking())
+				sendReply(TOMMessage.BLOCKING_HINT, request.context);
+			else
+				handleResult(request.operation, result, request.context, priority);
+		} catch (Exception e) {
+			DepSpaceException dse = (e instanceof DepSpaceException) ? (DepSpaceException) e
+					: new DepSpaceException("Server-side exception: " + e);
+			if (request != null)
+				handleResult(DepSpaceOperation.EXCEPTION, dse, request.context, priority);
 			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public byte[][] executeBatch(byte[][] commands, MessageContext[] msgCtxs) {
-        stateLock.lock();
-        for(int i = 0; i < commands.length; i++) execute(commands[i], msgCtxs[i], false);
-        stateLock.unlock();
-        return new byte[commands.length][];
+		stateLock.lock();
+		for (int i = 0; i < commands.length; i++)
+			execute(commands[i], msgCtxs[i], false);
+		stateLock.unlock();
+		return new byte[commands.length][];
 	}
 
 	public void handleResult(DepSpaceOperation operation, Object result, Context ctx, boolean sendSync) {
-		if(sendSync) {
+		if (sendSync) {
 			DepSpaceReply reply = new DepSpaceReply(operation, result);
 			byte[] content = reply.serialize();
 			sendReply(content, ctx);
@@ -90,21 +98,20 @@ public class DepSpaceReplica extends DefaultRecoverable implements DepSpaceEvent
 	}
 
 	public void sendReply(byte[] content, Context ctx) {
-		TOMMessage reply = new TOMMessage(replicaID, ctx.session, ctx.sequence, ctx.operationID, content, ctx.view, ctx.requestType);
+		TOMMessage reply = new TOMMessage(replicaID, ctx.session, ctx.sequence, ctx.operationID, content, ctx.view,
+				ctx.requestType);
 		replicaContext.getServerCommunicationSystem().send(new int[] { ctx.invokerID }, reply);
 	}
 
-	
 	/**************************
 	 * DEPSPACE EVENT HANDLER *
 	 **************************/
-	
+
 	@Override
 	public void handleEvent(DepSpaceOperation operation, DepTuple tuple, Context ctx) {
 		handleResult(operation, tuple, ctx, true);
 	}
-	
-	
+
 	/***************
 	 * RECOVERABLE *
 	 ***************/
@@ -115,83 +122,112 @@ public class DepSpaceReplica extends DefaultRecoverable implements DepSpaceEvent
 		this.replicaContext = replicaContext;
 	}
 
-
 	@Override
 	public StateManager getStateManager() {
-		if(stateManager == null) stateManager = super.getStateManager();
-    	return stateManager;
+		if (stateManager == null)
+			stateManager = super.getStateManager();
+		return stateManager;
 	}
 
 	@Override
 	public void noOp(int op) {
-		//NO OP IMPLEMENTATION
-	}	
+		// NO OP IMPLEMENTATION
+	}
 
 	/************************
 	 * ASYNCHRONOUS SENDING *
 	 ************************/
-	
+
 	private static class DepSpaceReplyContent {
-		
+
 		public final DepSpaceOperation operation;
 		public final Object result;
 		public final Context ctx;
-		
-		
+
 		public DepSpaceReplyContent(DepSpaceOperation operation, Object result, Context ctx) {
 			this.operation = operation;
 			this.result = result;
 			this.ctx = ctx;
 		}
-		
+
 	}
-	
-	
+
 	private class DepSpaceReplicaSendThread extends Thread {
-		
+
 		@Override
 		public void run() {
 			try {
-				while(!isInterrupted()) {
+				while (!isInterrupted()) {
 					DepSpaceReplyContent replyContent = replyQueue.take();
 					DepSpaceReply reply = new DepSpaceReply(replyContent.operation, replyContent.result);
 					byte[] content = reply.serialize();
 					sendReply(content, replyContent.ctx);
 				}
-			} catch(InterruptedException ie) {
+			} catch (InterruptedException ie) {
 				return;
 			}
 		}
 	}
-	
-	
+
 	/********
 	 * MAIN *
 	 ********/
 
 	public static void main(String[] args) {
-		if(args.length < 2) {
-			System.out.println("Use: java DepSpaceServer <processId> <config-home> <join option (optional)>");
+		if (args.length < 2) {
+			logger.severe("Use: java DepSpaceServer <processId> <config-home> <join option (optional)>");
+			System.exit(-1);
+		}
+		int replicaId = 0;
+		try {
+			replicaId = Integer.parseInt(args[0]);
+		} catch (Exception e) {
+			logger.severe("The value '" + args[0] + "' is not a valid replicaId.");
 			System.exit(-1);
 		}
 
-		DepSpaceConfiguration.init(args[1]);
-		boolean join = (args.length > 2) ? Boolean.valueOf(args[2]) : false;
-		new DepSpaceReplica(Integer.parseInt(args[0]), join);
-	}
+		String configHome = args[1];
+		if(!new File(configHome).exists()){
+			logger.severe("The config-home: '"+configHome+"' does not exist.");
+			System.exit(-1);
+		}
+		if(!new File(configHome).isDirectory()){
+			logger.severe("The config-home: '"+configHome+"' is not a folder.");
+			System.exit(-1);
+		}
+		
+		
+		//remove currentView from last execution
+		File currentViewFile = new File(configHome+"/currentView");
+		
+		logger.info("Deleting previous current view... ("+currentViewFile.getAbsolutePath()+")");
+		
+		currentViewFile.delete();
+			
 
+		DepSpaceConfiguration.init(configHome);
+		boolean join = false;
+		if (args.length > 2){
+			try{
+				join = Boolean.valueOf(args[2]);	
+			}catch(Exception e){
+				logger.severe("Not a valid value for join option: " + args[2]);
+				System.exit(-1);
+			}
+			
+		}
+		new DepSpaceReplica(replicaId, join);
+	}
 
 	@Override
 	public void installSnapshot(byte[] state) {
-		
-	}
 
+	}
 
 	@Override
 	public byte[] getSnapshot() {
-		return new byte[] {1};
+		return new byte[] { 1 };
 	}
-
 
 	@Override
 	public byte[][] appExecuteBatch(byte[][] commands, MessageContext[] msgCtxs) {

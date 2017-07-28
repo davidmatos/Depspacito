@@ -7,45 +7,23 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-
 	<name>${project.artifactId}</name>
-
-
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-
-
-
-		<mainclass>depspace.server.DepSpaceReplica</mainclass>
+		<replicaMainclass>depspace.server.DepSpaceReplica</replicaMainclass>
+		<clientMainclass>depspace.demo.EDSDemoClient</clientMainclass>
+		<replica.id>0</replica.id>
+		<replica.configDir>config/</replica.configDir>
+		<client.id>4</client.id>
+		<client.configDir>config/</client.configDir>
+		<client.extensionsCoreDir>src/</client.extensionsCoreDir>
 	</properties>
 
-
-
-
-
 	<dependencies>
-
-		<dependency>
-			<groupId>group</groupId>
-			<artifactId>com.sample</artifactId>
-			<version>1.0</version>
-
-			<systemPath>${project.basedir}/lib/PVSS.jar</systemPath>
-		</dependency>
-
-		<dependency>
-			<groupId>group</groupId>
-			<artifactId>com.sample</artifactId>
-			<version>1.1-beta</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/SMaRt-eds.jar</systemPath>
-		</dependency>
-
 
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
@@ -59,8 +37,6 @@
 		<!-- <version>06</version> -->
 		<!-- </dependency> -->
 
-
-
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
@@ -72,11 +48,13 @@
 			<artifactId>devsmart-core</artifactId>
 			<version>0.1.4</version>
 		</dependency>
+
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-all</artifactId>
 			<version>4.0.25.Final</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -89,17 +67,11 @@
 			<version>1.5.8</version>
 			<scope>test</scope>
 		</dependency>
-
-
 		<!-- <dependency> -->
 		<!-- <groupId>cglib</groupId> -->
 		<!-- <artifactId>cglib-nodep</artifactId> -->
 		<!-- <version>2.1_3</version> -->
 		<!-- </dependency> -->
-
-
-
-
 
 		<!-- TODO: These two dependencies need to be imported in a different way. -->
 		<!-- http://roufid.com/3-ways-to-add-local-jar-to-maven-project/ -->
@@ -115,23 +87,15 @@
 			<groupId>org.bftsmart</groupId>
 			<artifactId>SMaRt-eds</artifactId>
 			<version>2.0</version>
-
 			<systemPath>${basedir}/lib/SMaRt-eds.jar</systemPath>
 			<scope>system</scope>
 		</dependency>
 
-
-
-
-
 	</dependencies>
-
-
 
 
 	<build>
 		<pluginManagement>
-			<!-- plugin management defines common settings -->
 			<plugins>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -139,39 +103,60 @@
 					<version>1.5.0</version>
 					<executions>
 						<execution>
+							<id>replica</id>
 							<goals>
 								<goal>java</goal>
 							</goals>
+							<configuration>
+								<!-- to prevent deprecation warning: -->
+								<killAfter>-1</killAfter>
+								<mainClass>${replicaMainclass}</mainClass>
+								<arguments>
+									<replica.id>0</replica.id>
+									<replica.configDir>config/</replica.configDir>
+								</arguments>
+								<includePluginDependencies>true</includePluginDependencies>
+								<classpathScope>compile</classpathScope>
+								<executableDependency>
+									<groupId>org.bftsmart</groupId>
+									<artifactId>SMaRt-eds</artifactId>
+								</executableDependency>
+								<executableDependency>
+									<groupId>org.pvss</groupId>
+									<artifactId>PVSS</artifactId>
+								</executableDependency>
+
+							</configuration>
+						</execution>
+						<execution>
+							<id>client</id>
+							<goals>
+								<goal>java</goal>
+							</goals>
+							<configuration>
+								<!-- to prevent deprecation warning: -->
+								<killAfter>-1</killAfter>
+								<mainClass>${clientMainclass}</mainClass>
+								<arguments>
+									<client.id>4</client.id>
+									<client.configDir>config/</client.configDir>
+									<client.extensionsCoreDir>src/</client.extensionsCoreDir>
+								</arguments>
+								<includePluginDependencies>true</includePluginDependencies>
+								<classpathScope>compile</classpathScope>
+								<executableDependency>
+									<groupId>org.bftsmart</groupId>
+									<artifactId>SMaRt-eds</artifactId>
+								</executableDependency>
+								<executableDependency>
+									<groupId>org.pvss</groupId>
+									<artifactId>PVSS</artifactId>
+								</executableDependency>
+							</configuration>
 						</execution>
 					</executions>
-					<configuration>
 
-						<!-- to prevent deprecation warning: -->
-						<killAfter>-1</killAfter>
-						<mainClass>${mainclass}</mainClass>
-						<arguments>
-							<argument>${ws.url}</argument>
-						</arguments>
-
-
-						<includePluginDependencies>true</includePluginDependencies>
-						<classpathScope>compile</classpathScope>
-						<executableDependency>
-							<groupId>org.bftsmart</groupId>
-							<artifactId>SMaRt-eds</artifactId>
-						</executableDependency>
-						<executableDependency>
-							<groupId>org.pvss</groupId>
-							<artifactId>PVSS</artifactId>
-						</executableDependency>
-
-
-
-
-
-					</configuration>
 					<dependencies>
-
 						<dependency>
 							<groupId>org.pvss</groupId>
 							<artifactId>PVSS</artifactId>
@@ -189,11 +174,7 @@
 							<scope>system</scope>
 						</dependency>
 					</dependencies>
-
-
-
 				</plugin>
-
 
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -217,16 +198,19 @@
 					</configuration>
 				</plugin>
 
-
-
-
-
-
-
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<configuration>
+						<systemProperties>
+							<property>
+								<name>java.util.logging.config.file</name>
+								<value>${basedir}/config/logging.properties</value>
+							</property>
+						</systemProperties>
+					</configuration>
+				</plugin>
 
 			</plugins>
 		</pluginManagement>
 	</build>
-
-
 </project>

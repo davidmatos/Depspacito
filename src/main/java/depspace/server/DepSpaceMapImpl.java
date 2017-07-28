@@ -328,7 +328,7 @@ public class DepSpaceMapImpl implements DepSpace {
 
 	private void printTree(){
 		for(Object o : tupleBag.keySet()){
-			System.out.println(o.toString());
+			DepSpaceReplica.logger.info(o.toString());
 			ListMap m = tupleBag.get(o);
 			printTree(m, "\t");
 		}
@@ -337,13 +337,13 @@ public class DepSpaceMapImpl implements DepSpace {
 	private void printTree(ListMap m, String ident){
 		if(m.isMap()){
 			for(Object key : m.getMap().keySet()){
-				System.out.println(ident+key.toString());
+				DepSpaceReplica.logger.info(ident+key.toString());
 				printTree(m.getMap().get(key), ident.concat("\t"));
 			}
 		}else{
 			Collection <DepTuple> l = m.getList().rdAll();
 			for(DepTuple t : l){
-				System.out.println(ident + t.toStringTuple());
+				DepSpaceReplica.logger.info(ident + t.toStringTuple());
 			}
 		}
 	}
