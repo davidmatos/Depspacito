@@ -2,7 +2,6 @@ package depspace.demo;
 
 import depspace.general.DepSpaceConfiguration;
 import depspace.recipes.EDSSharedValue;
-import depspace.recipes.SharedValueService;
 
 
 public class EDSDemoClient {

@@ -1,7 +1,5 @@
 package depspace.policyenforcement;
 
-import groovy.lang.GroovyClassLoader;
-
 import java.util.Collection;
 import java.util.List;
 
@@ -10,6 +8,7 @@ import depspace.general.DepSpaceException;
 import depspace.general.DepSpaceOperation;
 import depspace.general.DepTuple;
 import depspace.server.DepSpaceServerLayer;
+import groovy.lang.GroovyClassLoader;
 
 
 public class PolicyEnforcementLayer extends DepSpaceServerLayer {

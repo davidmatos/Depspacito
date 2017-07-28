@@ -26,15 +26,15 @@ import depspace.general.DepTuple;
  */
 public class ClientDemo {
 
-	private int executions;
-	private boolean createSpace;
-	private int id;
+//	private int executions;
+//	private boolean createSpace;
+//	private int id;
 
 	/** Creates a new instance of ClientTest */
 	public ClientDemo(int clientId, int exec, boolean createSpace) {
-		this.id = clientId;
-		this.executions = exec;
-		this.createSpace = createSpace;
+//		this.id = clientId;
+//		this.executions = exec;
+//		this.createSpace = createSpace;
 	}
 
 	public void run() {
@@ -56,54 +56,54 @@ public class ClientDemo {
 		return DepTuple.createTuple(i, "confidentiality", "I'm the client",
 				"BUMMMM!!!");
 	}
-
-	private void access(DepSpaceAccessor accessor) throws Exception {
-		System.out.println("Using the tuple: " + get(0));
-
-		for (int i = 0; i < executions; i++) {
-			System.out.println("Sending " + i);
-			// OUT
-			//			DepTuple dt = get(i);
-			//			accessor.out(dt);
-			//System.out.println("OUT ready.");
-			//pause();
-			// RDP
-			DepTuple template = DepTuple.createTuple(i, "*", "*", "*");
-			System.out.println("RDP: " + accessor.rdp(template));
-			//pause();
-			// CAS READ
-			//System.out.println("CAS READ: " + accessor.cas(template, dt));
-			//pause();
-			// INP
-			//System.out.println("INP: " + accessor.inp(template));
-			//pause();
-			// CAS INSERT
-			//System.out.println("CAS INSERT: " + accessor.cas(template, dt));
-			//pause();
-
-		}
-
-		// INALL TEST
-		/* 	DepTuple template = DepTuple.createTuple("*", "*", "*", "*");
-		Collection<DepTuple> tupleBag = accessor.inAll(template, 2);
-		System.out.println("INALL:");
-		for (DepTuple tuple : tupleBag)
-			System.out.println("\t IN: " + tuple);
-		pause();*/
-		// accessor.renewTransactionTimeout(transId,9999);
-		synchronized (this) {
-			try {
-				this.wait(500);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		// accessor.commitTransaction(transId);
-	}
+//
+//	private void access(DepSpaceAccessor accessor) throws Exception {
+//		System.out.println("Using the tuple: " + get(0));
+//
+//		for (int i = 0; i < executions; i++) {
+//			System.out.println("Sending " + i);
+//			// OUT
+//			//			DepTuple dt = get(i);
+//			//			accessor.out(dt);
+//			//System.out.println("OUT ready.");
+//			//pause();
+//			// RDP
+//			DepTuple template = DepTuple.createTuple(i, "*", "*", "*");
+//			System.out.println("RDP: " + accessor.rdp(template));
+//			//pause();
+//			// CAS READ
+//			//System.out.println("CAS READ: " + accessor.cas(template, dt));
+//			//pause();
+//			// INP
+//			//System.out.println("INP: " + accessor.inp(template));
+//			//pause();
+//			// CAS INSERT
+//			//System.out.println("CAS INSERT: " + accessor.cas(template, dt));
+//			//pause();
+//
+//		}
+//
+//		// INALL TEST
+//		/* 	DepTuple template = DepTuple.createTuple("*", "*", "*", "*");
+//		Collection<DepTuple> tupleBag = accessor.inAll(template, 2);
+//		System.out.println("INALL:");
+//		for (DepTuple tuple : tupleBag)
+//			System.out.println("\t IN: " + tuple);
+//		pause();*/
+//		// accessor.renewTransactionTimeout(transId,9999);
+//		synchronized (this) {
+//			try {
+//				this.wait(500);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		// accessor.commitTransaction(transId);
+//	}
 
 	public static void main(String[] args) throws DepSpaceException {
 
-		int exec = 1;
+		
 		boolean create = true;
 
 		String name = "Demo Space";
@@ -160,7 +160,7 @@ public class ClientDemo {
 					System.out.println("Invalid number of args. ");
 					continue;
 				}
-				template = DepTuple.createTuple(commStr[1].split(","));
+				template = DepTuple.createTuple((Object[])commStr[1].split(","));
 				DepTuple dt = accessor.rdp(template);
 				if(dt==null)
 					System.out.println("null");
@@ -172,8 +172,8 @@ public class ClientDemo {
 					System.out.println("Invalid number of args. ");
 					continue;
 				}
-				template = DepTuple.createTuple(commStr[1].split(","));
-				tuple = DepTuple.createTuple(commStr[2].split(","));
+				template = DepTuple.createTuple((Object[])commStr[1].split(","));
+				tuple = DepTuple.createTuple((Object[])commStr[2].split(","));
 				DepTuple res = accessor.cas(template, tuple);
 				if(res==null)
 					System.out.println("null");
@@ -185,7 +185,7 @@ public class ClientDemo {
 					System.out.println("Invalid number of args. ");
 					continue;
 				}
-				template = DepTuple.createTuple(commStr[1].split(","));
+				template = DepTuple.createTuple((Object[])commStr[1].split(","));
 				Collection<DepTuple> l = accessor.inAll(template);
 				for(DepTuple t : l)
 					System.out.println(t.toStringTuple());
@@ -195,7 +195,7 @@ public class ClientDemo {
 					System.out.println("Invalid number of args. ");
 					continue;
 				}
-				template = DepTuple.createTuple(commStr[1].split(","));
+				template = DepTuple.createTuple((Object[])commStr[1].split(","));
 				DepTuple t = accessor.inp(template);
 				if(t==null)
 					System.out.println("null");
@@ -207,13 +207,13 @@ public class ClientDemo {
 					System.out.println("Invalid number of args. ");
 					continue;
 				}
-				tuple = DepTuple.createTuple(commStr[1].split(","));
+				tuple = DepTuple.createTuple((Object[])commStr[1].split(","));
 				accessor.out(tuple);
 				break;
 			case rdall:
 				Collection<DepTuple> list=null;
 				if(commStr.length==2){
-					template = DepTuple.createTuple(commStr[1].split(","));
+					template = DepTuple.createTuple((Object[])commStr[1].split(","));
 					list = accessor.rdAll(template, 0);
 				}else{
 					System.out.println("Invalid number of args. ");
@@ -227,8 +227,8 @@ public class ClientDemo {
 					System.out.println("Invalid number of args. ");
 					continue;
 				}
-				template = DepTuple.createTuple(commStr[1].split(","));
-				tuple = DepTuple.createTuple(commStr[2].split(","));
+				template = DepTuple.createTuple((Object[])commStr[1].split(","));
+				tuple = DepTuple.createTuple((Object[])commStr[2].split(","));
 				DepTuple r = accessor.replace(template, tuple);
 				if(r==null)
 					System.out.println("null");
@@ -239,6 +239,7 @@ public class ClientDemo {
 				break;
 			}
 		}
+		sc.close();
 	}
 }
 

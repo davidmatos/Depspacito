@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import depspace.util.Payload;
-
 import bftsmart.tom.MessageContext;
+import depspace.util.Payload;
 
 
 public class DepSpaceRequest {

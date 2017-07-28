@@ -6,13 +6,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 
+import depspace.general.DepTuple;
 import pvss.ErrorDecryptingException;
 import pvss.InvalidVSSScheme;
 import pvss.PVSSEngine;
 import pvss.PublicInfo;
 import pvss.PublishedShares;
 import pvss.Share;
-import depspace.general.DepTuple;
 
 /**
  * ConfidentialityScheme. 

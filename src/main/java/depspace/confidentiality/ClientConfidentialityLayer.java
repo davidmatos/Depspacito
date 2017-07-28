@@ -4,11 +4,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
-import pvss.InvalidVSSScheme;
 import depspace.client.DepSpaceClientLayer;
 import depspace.general.Context;
 import depspace.general.DepSpaceException;
 import depspace.general.DepTuple;
+import pvss.InvalidVSSScheme;
 
 /**
  * Confidentiality layer for DepSpace clients. 
