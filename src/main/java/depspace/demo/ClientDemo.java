@@ -20,7 +20,6 @@ import depspace.general.DepSpaceConfiguration;
 import depspace.general.DepSpaceException;
 import depspace.general.DepSpaceProperties;
 import depspace.general.DepTuple;
-import depspace.server.DepSpaceReplica;
 
 /**
  * 
