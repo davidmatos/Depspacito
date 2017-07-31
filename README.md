@@ -17,10 +17,22 @@ This version of DepSpace uses a tunned version of BFT-SMaRt (lib/SMaRt-eds.jar).
 ## Maven Instructions
 
 DepSpacito added maven support.
+
+First run:
 ```
-mvn clean compile exec:java@replica
-mvn clean compile exec:java@client
+mvn clean
 ```
+to clean the project folder and install the non-maven libs. This is required to install the jar libs of the project.
+
+Execute:
+```
+mvn install exec:java@replica &
+mvn install exec:java@client
+```
+to install DepSpacito and run a replica and a client.
+
+
+
 
 ### How to run DepSpace
 
