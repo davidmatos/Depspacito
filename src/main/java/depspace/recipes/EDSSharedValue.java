@@ -19,6 +19,9 @@ public class EDSSharedValue extends DepSpaceSharedValue {
 	@Override
 	public int getAndIncrement() throws Exception {
 		DepTuple result = depSpace.inp(GET_AND_INCREMENT_TEMPLATE);
+		if(result == null){
+			return 0;
+		}
 		count = (Integer) result.getFields()[0];
 		return count;
 	}

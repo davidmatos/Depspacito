@@ -45,6 +45,8 @@ public class DepSpaceMapImpl implements DepSpace {
 
 	@Override
 	public void out(DepTuple tuple, Context ctx) {
+		System.out.println("MapMapMap"); 
+	
 		if(this.depth==0 || this.depth > tuple.getFields().length){
 			listImpl.out(tuple, ctx);
 			return;

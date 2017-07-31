@@ -10,16 +10,16 @@
 	<name>${project.artifactId}</name>
 
 	<properties>
-
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<version.maven-install-plugin>2.5.2</version.maven-install-plugin>
 		<replicaMainclass>depspace.server.DepSpaceReplica</replicaMainclass>
-		<clientMainclass>depspace.demo.EDSDemoClient</clientMainclass>
+		<clientMainclass>depspace.demo.ClientDemo</clientMainclass>
 		<replica.id>0</replica.id>
 		<replica.configDir>config/</replica.configDir>
+		<replica.proxyPort>7892</replica.proxyPort>
 		<client.id>4</client.id>
 		<client.configDir>config/</client.configDir>
 		<client.extensionsCoreDir>src/</client.extensionsCoreDir>
@@ -92,6 +92,7 @@
 								<arguments>
 									<argument>${replica.id}</argument>
 									<argument>${replica.configDir}</argument>
+									<argument>${replica.proxyPort}</argument>
 								</arguments>
 								<includePluginDependencies>true</includePluginDependencies>
 								<classpathScope>compile</classpathScope>

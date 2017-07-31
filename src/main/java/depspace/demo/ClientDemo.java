@@ -29,27 +29,16 @@ public class ClientDemo {
 
 	public static final Logger logger = Logger.getLogger(ClientDemo.class.getName());
 	
-	
-//	private int executions;
-//	private boolean createSpace;
-//	private int id;
+
 
 	/** Creates a new instance of ClientTest */
 	public ClientDemo(int clientId, int exec, boolean createSpace) {
-//		this.id = clientId;
-//		this.executions = exec;
-//		this.createSpace = createSpace;
+
 	}
 
 	public void run() {
 		try {
 
-
-
-			/*
-			 * if(this.createSpace){ //this will delete the DepSpace
-			 * accessor.finalize(); }
-			 */
 			System.out.println("THE END!!!");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -60,78 +49,16 @@ public class ClientDemo {
 		return DepTuple.createTuple(i, "confidentiality", "I'm the client",
 				"BUMMMM!!!");
 	}
-//
-//	private void access(DepSpaceAccessor accessor) throws Exception {
-//		System.out.println("Using the tuple: " + get(0));
-//
-//		for (int i = 0; i < executions; i++) {
-//			System.out.println("Sending " + i);
-//			// OUT
-//			//			DepTuple dt = get(i);
-//			//			accessor.out(dt);
-//			//System.out.println("OUT ready.");
-//			//pause();
-//			// RDP
-//			DepTuple template = DepTuple.createTuple(i, "*", "*", "*");
-//			System.out.println("RDP: " + accessor.rdp(template));
-//			//pause();
-//			// CAS READ
-//			//System.out.println("CAS READ: " + accessor.cas(template, dt));
-//			//pause();
-//			// INP
-//			//System.out.println("INP: " + accessor.inp(template));
-//			//pause();
-//			// CAS INSERT
-//			//System.out.println("CAS INSERT: " + accessor.cas(template, dt));
-//			//pause();
-//
-//		}
-//
-//		// INALL TEST
-//		/* 	DepTuple template = DepTuple.createTuple("*", "*", "*", "*");
-//		Collection<DepTuple> tupleBag = accessor.inAll(template, 2);
-//		System.out.println("INALL:");
-//		for (DepTuple tuple : tupleBag)
-//			System.out.println("\t IN: " + tuple);
-//		pause();*/
-//		// accessor.renewTransactionTimeout(transId,9999);
-//		synchronized (this) {
-//			try {
-//				this.wait(500);
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		// accessor.commitTransaction(transId);
-//	}
+
 
 	public static void main(String[] args) throws DepSpaceException {
 
 		
-		boolean create = true;
-
-		String name = "Demo Space";
-		
-		DepSpaceConfiguration.init(null);
-		
-		// the DepSpace name
-		Properties prop = DepSpaceProperties.createDefaultProperties(name);
-
-		// use confidentiality?
-		prop.put(DepSpaceProperties.DPS_CONFIDEALITY, "false");
-
-		int clientID = 4;
-
-		// the DepSpace Accessor, who will access the DepSpace.
-		DepSpaceAccessor accessor = null;
-		if (create) {
-			accessor = new DepSpaceAdmin(clientID).createSpace(prop);
-		} else {
-			accessor = new DepSpaceAdmin(clientID).createAccessor(prop, create);
-		}
+		DepSpaceAccessor accessor = getDepSpaceAccessor();
 
 		int cont = 50;
 
+		
 		Scanner sc = new Scanner(System.in);
 		Command command = Command.rdp;
 		DepTuple template, tuple;
@@ -244,6 +171,31 @@ public class ClientDemo {
 			}
 		}
 		sc.close();
+	}
+
+	private static DepSpaceAccessor getDepSpaceAccessor() throws DepSpaceException {
+		boolean create = true;
+
+		String name = "Demo Space";
+		
+		DepSpaceConfiguration.init(null);
+		
+		// the DepSpace name
+		Properties prop = DepSpaceProperties.createDefaultProperties(name);
+
+		// use confidentiality?
+		prop.put(DepSpaceProperties.DPS_CONFIDEALITY, "false");
+
+		int clientID = 4;
+
+		// the DepSpace Accessor, who will access the DepSpace.
+		DepSpaceAccessor accessor = null;
+		if (create) {
+			accessor = new DepSpaceAdmin(clientID).createSpace(prop);
+		} else {
+			accessor = new DepSpaceAdmin(clientID).createAccessor(prop, create);
+		}
+		return accessor;
 	}
 }
 

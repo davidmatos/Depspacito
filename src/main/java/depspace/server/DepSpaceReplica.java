@@ -175,7 +175,7 @@ public class DepSpaceReplica extends DefaultRecoverable implements DepSpaceEvent
 
 	public static void main(String[] args) {
 		if (args.length < 2) {
-			logger.severe("Use: java DepSpaceServer <processId> <config-home> <join option (optional)>");
+			logger.severe("Use: java DepSpaceServer <processId> <config-home> <proxy-port> <join option (optional)>");
 			System.exit(-1);
 		}
 		int replicaId = 0;
@@ -217,6 +217,8 @@ public class DepSpaceReplica extends DefaultRecoverable implements DepSpaceEvent
 			
 		}
 		new DepSpaceReplica(replicaId, join);
+		
+		
 	}
 
 	@Override
