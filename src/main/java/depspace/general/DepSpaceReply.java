@@ -10,34 +10,31 @@ import java.util.List;
 
 import depspace.util.Payload;
 
-
-
 public class DepSpaceReply {
 
 	public final DepSpaceOperation operation;
 	public final Object arg;
 
-	
 	public DepSpaceReply(DepSpaceOperation operation, Object arg) {
 		this.operation = operation;
 		this.arg = arg;
 	}
-	
-	
+
 	@Override
 	public String toString() {
-		return "{ operation=" + operation + " | arg=" + arg + " }" ;
+		return "{ operation=" + operation + " | arg=" + arg + " }";
 	}
 
 	@Override
 	public boolean equals(Object object) {
-		if(!(object instanceof DepSpaceReply)) return false;
+		if (!(object instanceof DepSpaceReply))
+			return false;
 		DepSpaceReply other = (DepSpaceReply) object;
-		if(operation != other.operation) return false;
+		if (operation != other.operation)
+			return false;
 		return arg.equals(other.arg);
 	}
-	
-	
+
 	// #####################################
 	// # SERIALIZATION AND DESERIALIZATION #
 	// #####################################
@@ -46,12 +43,12 @@ public class DepSpaceReply {
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ObjectOutputStream oos = new ObjectOutputStream(baos);
-			
+
 			// Serialize operation
 			oos.write((byte) operation.ordinal());
-			
+
 			// Serialize argument
-			switch(operation) {
+			switch (operation) {
 			case OUT:
 			case OUTALL:
 			case CREATE:
@@ -73,37 +70,42 @@ public class DepSpaceReply {
 			case INALL:
 				@SuppressWarnings("unchecked")
 				List<DepTuple> tuples = (List<DepTuple>) arg;
-				oos.writeInt(tuples.size());
-				for(DepTuple tuple: tuples) {
-					chunk = tuple.serialize();
-					Payload.writeChunk(chunk, oos);
+				if (tuples == null) {
+					oos.writeInt(0);
+				} else {
+					oos.writeInt(tuples.size());
+					for (DepTuple tuple : tuples) {
+						chunk = tuple.serialize();
+						Payload.writeChunk(chunk, oos);
+					}
 				}
 				break;
 			case EXCEPTION:
 				oos.writeObject(arg);
 				break;
 			default:
-				System.err.println(DepSpaceReply.class.getSimpleName() + ".serialize(): Unhandled operation type " + operation);
+				System.err.println(
+						DepSpaceReply.class.getSimpleName() + ".serialize(): Unhandled operation type " + operation);
 			}
-			
+
 			oos.close();
-			
+
 			return baos.toByteArray();
-		} catch(IOException ioe) {
+		} catch (IOException ioe) {
 			ioe.printStackTrace();
 			return null;
 		}
 	}
-	
+
 	public DepSpaceReply(byte[] buffer) throws Exception {
 		ByteArrayInputStream in = new ByteArrayInputStream(buffer);
 		ObjectInputStream ois = new ObjectInputStream(in);
 
 		// Deserialize operation
 		this.operation = DepSpaceOperation.getOperation(ois.read());
-		
+
 		// Deserialize argument
-		switch(operation) {
+		switch (operation) {
 		case OUT:
 		case OUTALL:
 		case CREATE:
@@ -126,7 +128,7 @@ public class DepSpaceReply {
 		case INALL:
 			int listSize = ois.readInt();
 			List<DepTuple> list = new ArrayList<DepTuple>(listSize);
-			for(int i = 0; i < listSize; i++) {
+			for (int i = 0; i < listSize; i++) {
 				chunk = Payload.readChunk(ois);
 				list.add(new DepTuple(chunk));
 			}
@@ -141,5 +143,5 @@ public class DepSpaceReply {
 		}
 		ois.close();
 	}
-	
+
 }
