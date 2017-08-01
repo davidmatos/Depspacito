@@ -10,7 +10,7 @@ if [ "$#" -ne 1 ]; then
 fi
 
 #deleting previous build.log file
-rm build.log
+rm -f build.log
 
 MPM_IP_ADDRESS=$1
 CURRENT_DIR=`pwd`
@@ -18,9 +18,11 @@ LOG_FILE="$CURRENT_DIR/build.log"
 
 echo "" | tee -a "$LOG_FILE"
 echo "Configuring hosts.config..." | tee -a "$LOG_FILE"
-echo "Installing SCNodeCode..." | tee -a "$LOG_FILE"
-echo "MPM IP:$MPM_IP_ADDRESS." | tee -a "$LOG_FILE"
-echo "Configuring MPM Adapter..." | tee -a "$LOG_FILE"
+#MP David Why the message below ?
+#echo "Installing SCNodeCode..." | tee -a "$LOG_FILE"
+echo "MPM IP:$MPM_IP_ADDRESS" | tee -a "$LOG_FILE"
+#MP David Why the message below ?
+#echo "Configuring MPM Adapter..." | tee -a "$LOG_FILE"
 rm config/hosts.config
 echo "0 $MPM_IP_ADDRESS 11000" > config/hosts.config
 
