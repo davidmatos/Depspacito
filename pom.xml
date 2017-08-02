@@ -54,6 +54,11 @@
 			<version>1.5.8</version>
 		</dependency>
 		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-jdk14</artifactId>
+		    <version>1.5.8</version>	
+		</dependency>
+		<dependency>
 			<groupId>org.bftsmart</groupId>
 			<artifactId>SMaRt-eds</artifactId>
 			<version>2.0</version>
