@@ -28,9 +28,7 @@ public class DepSpaceListImpl implements DepSpace {
 
 	@Override
 	public void out(DepTuple tuple, Context ctx) {
-		System.out.println("..................Vou inserir um tuplo.....................");
 		tuplesBag.add(tuple);
-		System.out.println(".......................Inseri um tuplo.....................");
 	}
 
 	@Override
