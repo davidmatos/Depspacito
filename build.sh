@@ -30,7 +30,7 @@ echo "" >> $LOG_FILE
 
 echo "----------------------- mvn install -----------------------" >> $LOG_FILE
 echo "Executing: mvn compile"
-mvn --quiet compile | tee -a $LOG_FILE
+mvn --quiet install | tee -a $LOG_FILE
 echo "" >> $LOG_FILE
 
 echo "Done. Log file -> $LOG_FILE" | tee -a "$LOG_FILE"

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
@@ -14,11 +15,13 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
-		<replicaMainclass>depspace.server.DepSpaceReplica</replicaMainclass>
-		<clientMainclass>depspace.demo.ClientDemo</clientMainclass>
+
+        <replicaMainclass>depspace.server.DepSpaceReplica</replicaMainclass>
 		<replica.id>0</replica.id>
 		<replica.configDir>config/</replica.configDir>
 		<replica.proxyPort>7892</replica.proxyPort>
+
+        <clientMainclass>depspace.demo.ClientDemo</clientMainclass>
 		<client.id>4</client.id>
 		<client.configDir>config/</client.configDir>
 		<client.extensionsCoreDir>src/</client.extensionsCoreDir>
@@ -64,66 +67,11 @@
 
 	<build>
 		<pluginManagement>
+			<!-- plugin management defines common settings -->
 			<plugins>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>exec-maven-plugin</artifactId>
-					<version>1.5.0</version>
-					<executions>
-						<execution>
-							<id>replica</id>
-							<goals>
-								<goal>java</goal>
-							</goals>
-							<configuration>
-								<!-- to prevent deprecation warning: -->
-								<killAfter>-1</killAfter>
-								<mainClass>${replicaMainclass}</mainClass>
-								<arguments>
-									<argument>${replica.id}</argument>
-									<argument>${replica.configDir}</argument>
-									<argument>${replica.proxyPort}</argument>
-								</arguments>
-								<includePluginDependencies>true</includePluginDependencies>
-								<classpathScope>compile</classpathScope>
-							</configuration>
-						</execution>
-						<execution>
-							<id>client</id>
-							<goals>
-								<goal>java</goal>
-							</goals>
-							<configuration>
-								<!-- to prevent deprecation warning: -->
-								<killAfter>-1</killAfter>
-								<mainClass>${clientMainclass}</mainClass>
-								<arguments>
-									<argument>${client.id}</argument>
-									<argument>${client.configDir}/</argument>
-									<argument>${client.extensionsCoreDir}</argument>
-								</arguments>
-								<includePluginDependencies>true</includePluginDependencies>
-								<classpathScope>compile</classpathScope>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-
-				<plugin>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<configuration>
-						<systemProperties>
-							<property>
-								<name>java.util.logging.config.file</name>
-								<value>${basedir}/config/logging.properties</value>
-							</property>
-						</systemProperties>
-					</configuration>
-				</plugin>
-
-				<!-- Adding non maven dependencies following this approach: -->
+				<!-- Adding non-maven dependencies to local repository. -->
+                <!-- To install dependencies in local repository, execute: mvn clean -->
 				<!-- https://dzone.com/articles/the-maven-way-to-add-non-maven-jars-to-a-maven-pro -->
-				<!-- To install dependencies in local repository, execute: mvn clean -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-install-plugin</artifactId>
@@ -163,6 +111,36 @@
 						</execution>
 					</executions>
 				</plugin>
+
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<configuration>
+						<systemProperties>
+							<property>
+								<name>java.util.logging.config.file</name>
+								<value>${basedir}/config/logging.properties</value>
+							</property>
+						</systemProperties>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>exec-maven-plugin</artifactId>
+					<version>1.5.0</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>java</goal>
+							</goals>
+							<configuration>
+								<!-- to prevent deprecation warning: -->
+								<killAfter>-1</killAfter>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>appassembler-maven-plugin</artifactId>
@@ -181,7 +159,6 @@
 								<id>replica</id>
 								<mainClass>${replicaMainclass}</mainClass>
 							</program>
-
 							<program>
 								<id>client</id>
 								<mainClass>${clientMainclass}</mainClass>
@@ -192,4 +169,51 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
+	<profiles>
+        <profile>
+            <id>replica</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <configuration>
+                                <mainClass>${replicaMainclass}</mainClass>
+                                <arguments>
+                                    <argument>${replica.id}</argument>
+                                    <argument>${replica.configDir}</argument>
+                                    <argument>${replica.proxyPort}</argument>
+                                </arguments>
+                                <includePluginDependencies>true</includePluginDependencies>
+                                <classpathScope>compile</classpathScope>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+		<profile>
+			<id>client</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<configuration>
+							<mainClass>${clientMainclass}</mainClass>
+							<arguments>
+								<argument>${client.id}</argument>
+								<argument>${client.configDir}/</argument>
+								<argument>${client.extensionsCoreDir}</argument>
+							</arguments>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 </project>
