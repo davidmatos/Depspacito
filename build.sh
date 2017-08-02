@@ -18,15 +18,11 @@ rm -f "$LOG_FILE"
 
 echo "" | tee -a "$LOG_FILE"
 echo "Configuring hosts.config..." | tee -a "$LOG_FILE"
-#MP David Why the message below ?
-#echo "Installing SCNodeCode..." | tee -a "$LOG_FILE"
 echo "MPM IP:$MPM_IP_ADDRESS" | tee -a "$LOG_FILE"
-#MP David Why the message below ?
-#echo "Configuring MPM Adapter..." | tee -a "$LOG_FILE"
 rm config/hosts.config
 echo "0 $MPM_IP_ADDRESS 11000" > config/hosts.config
 
-echo "------------------ Installing DepSpacito ------------------" >> $LOG_FILE
+echo "------------------ Installing DepSpacito ------------------" | tee -a "$LOG_FILE"
 echo "----------------------- mvn clean ----------------------- " >> $LOG_FILE
 echo "Executing: mvn clean"
 mvn clean >> $LOG_FILE
