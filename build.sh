@@ -9,12 +9,12 @@ if [ "$#" -ne 1 ]; then
   exit 1
 fi
 
-#deleting previous build.log file
-rm -f build.log
-
 MPM_IP_ADDRESS=$1
 CURRENT_DIR=`pwd`
 LOG_FILE="$CURRENT_DIR/build.log"
+
+#deleting previous log file
+rm -f "$LOG_FILE"
 
 echo "" | tee -a "$LOG_FILE"
 echo "Configuring hosts.config..." | tee -a "$LOG_FILE"
