@@ -5,6 +5,6 @@ if [ ! $# -eq 1 ]; then
 	echo "Possible client ids = [1001-1002]"
 	exit
 fi
-
+$CLIENT_ID=$1
 mvn exec:java@client -Dclient.id=$CLIENT_ID
 
