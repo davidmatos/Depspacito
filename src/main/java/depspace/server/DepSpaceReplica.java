@@ -195,30 +195,30 @@ public class DepSpaceReplica extends DefaultRecoverable implements DepSpaceEvent
 			logger.severe("The config-home: '"+configHome+"' is not a folder.");
 			System.exit(-1);
 		}
-		
-		
+
+
 		//remove currentView from last execution
 		File currentViewFile = new File(configHome+"/currentView");
-		
+
 		logger.info("Deleting previous current view... ("+currentViewFile.getAbsolutePath()+")");
-		
+
 		currentViewFile.delete();
-			
+
 
 		DepSpaceConfiguration.init(configHome);
 		boolean join = false;
 		if (args.length > 2){
 			try{
-				join = Boolean.valueOf(args[2]);	
+				join = Boolean.valueOf(args[2]);
 			}catch(Exception e){
 				logger.severe("Not a valid value for join option: " + args[2]);
 				System.exit(-1);
 			}
-			
+
 		}
 		new DepSpaceReplica(replicaId, join);
-		
-		
+
+
 	}
 
 	@Override

@@ -16,12 +16,12 @@
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
 
-        <replicaMainclass>depspace.server.DepSpaceReplica</replicaMainclass>
+		<replicaMainclass>depspace.server.DepSpaceReplica</replicaMainclass>
 		<replica.id>0</replica.id>
 		<replica.configDir>config/</replica.configDir>
 		<replica.proxyPort>7892</replica.proxyPort>
 
-        <clientMainclass>depspace.demo.ClientDemo</clientMainclass>
+		<clientMainclass>depspace.demo.ClientDemo</clientMainclass>
 		<client.id>4</client.id>
 		<client.configDir>config/</client.configDir>
 		<client.extensionsCoreDir>src/</client.extensionsCoreDir>
@@ -33,10 +33,11 @@
 			<artifactId>groovy-all</artifactId>
 			<version>2.4.12</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
-			<version>1.5</version>
+			<version>1.11</version>
 		</dependency>
 		<dependency>
 			<groupId>com.dev-smart</groupId>
@@ -54,9 +55,9 @@
 			<version>1.5.8</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-jdk14</artifactId>
-		    <version>1.5.8</version>	
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-jdk14</artifactId>
+			<version>1.5.8</version>
 		</dependency>
 		<dependency>
 			<groupId>org.bftsmart</groupId>
@@ -75,7 +76,7 @@
 			<!-- plugin management defines common settings -->
 			<plugins>
 				<!-- Adding non-maven dependencies to local repository. -->
-                <!-- To install dependencies in local repository, execute: mvn clean -->
+				<!-- To install dependencies in local repository, execute: mvn clean -->
 				<!-- https://dzone.com/articles/the-maven-way-to-add-non-maven-jars-to-a-maven-pro -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -175,31 +176,34 @@
 		</pluginManagement>
 	</build>
 
+
+
+
 	<profiles>
-        <profile>
-            <id>replica</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <configuration>
-                                <mainClass>${replicaMainclass}</mainClass>
-                                <arguments>
-                                    <argument>${replica.id}</argument>
-                                    <argument>${replica.configDir}</argument>
-                                    <argument>${replica.proxyPort}</argument>
-                                </arguments>
-                                <includePluginDependencies>true</includePluginDependencies>
-                                <classpathScope>compile</classpathScope>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
+		<profile>
+			<id>replica</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<configuration>
+							<mainClass>${replicaMainclass}</mainClass>
+							<arguments>
+								<argument>${replica.id}</argument>
+								<argument>${replica.configDir}</argument>
+								<argument>${replica.proxyPort}</argument>
+							</arguments>
+							<includePluginDependencies>true</includePluginDependencies>
+							<classpathScope>compile</classpathScope>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 		<profile>
 			<id>client</id>
 			<build>
