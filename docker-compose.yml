@@ -1,3 +1,6 @@
+#docker network create --driver overlay --attachable --subnet 10.0.6.0/24 --gateway 10.0.6.1 depspace
+#docker-compose up
+
 version: '3.1'
 
 services:
@@ -7,37 +10,39 @@ services:
     ports: 
       - "11000:11000"
     networks:
-      rockfs:
-        ipv4_address: 10.5.0.2
+      depspace:
+        ipv4_address: 10.0.6.2
   depspacito-1:
     build: .
     command: bash -c "mvn clean && mvn install && mvn exec:java -P replica -Dreplica.id=1"
     ports: 
       - "11010:11010"
     networks: 
-      rockfs:
-        ipv4_address: 10.5.0.3
+      depspace:
+        ipv4_address: 10.0.6.3
   depspacito-2:
     build: .
     command: bash -c "mvn clean && mvn install && mvn exec:java -P replica -Dreplica.id=2"
     ports: 
       - "11020:11020"
     networks: 
-      rockfs:
-        ipv4_address: 10.5.0.4
+      depspace:
+        ipv4_address: 10.0.6.4
   depspacito-3:
     build: .
     command: bash -c "mvn clean && mvn install && mvn exec:java -P replica -Dreplica.id=3"
     ports: 
-      - "11030:11030"
+      - "11040:11040"
     networks: 
-      rockfs:
-        ipv4_address: 10.5.0.5
-
+      depspace:
+        ipv4_address: 10.0.6.6
+        
 networks:
-  rockfs:
+  depspace:
     driver: overlay
     ipam:
         driver: default
         config:
-            - subnet: 10.5.0.0/16
+        -
+          subnet: 10.0.6.0/24
+
