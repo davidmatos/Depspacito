@@ -14,6 +14,22 @@ DepSpace requires the Java Runtime Environment version 1.7 or later.
 This version of DepSpace uses a tunned version of BFT-SMaRt (lib/SMaRt-eds.jar). In the future it will be fully integrated with the most up-to-date distribution of this library.
 
 
+
+## Docker Instructions
+
+To build an image with DepSpace execute:
+
+```
+docker build -t depspacito .
+```
+
+To start a container with DepSpace instance execute:
+
+```
+docker run -it -p 11000:11000 depspacito mvn clean && mvn install && mvn exec:java
+```
+
+
 ## Maven Instructions
 
 DepSpacito added maven support.
@@ -30,8 +46,6 @@ mvn install exec:java@replica &
 mvn install exec:java@client
 ```
 to install DepSpacito and run a replica and a client.
-
-
 
 
 ### How to run DepSpace
