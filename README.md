@@ -26,7 +26,7 @@ docker build -t depspacito .
 To start a container with DepSpace instance execute:
 
 ```
-docker run -it -p 11000:11000 depspacito mvn clean && mvn install && mvn exec:java
+docker run -it -p 11000:11000 depspacito  /bin/bash -c "mvn clean && mvn install && mvn exec:java"
 ```
 
 
